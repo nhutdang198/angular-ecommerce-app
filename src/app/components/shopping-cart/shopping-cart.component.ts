@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CartService } from '../../services/cart.service'; // Import CartService
 import { Product } from '../../models/product.model';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import validator from 'validator';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -11,22 +11,22 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
   styleUrls: ['./shopping-cart.component.css'],
 })
 export class ShoppingCartComponent implements OnInit {
-  contactForm: FormGroup;
   cart: Product[] = [];
   total: number = 0;
+
+  name: string = '';
+  email: string = '';
+  address: string = '';
+
+  nameError: boolean = true;
+  emailError: boolean = true;
+  addressError: boolean = true;
 
   constructor(
     private cartService: CartService,
     private router: Router,
-    private formBuilder: FormBuilder,
     private notification: NzNotificationService
-  ) {
-    this.contactForm = this.formBuilder.group({
-      name: ['', [Validators.minLength(4)]],
-      email: ['', [Validators.minLength(4), Validators.email]],
-      address: ['', [Validators.minLength(4)]],
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.cart = this.cartService.getCartContents(); // Get cart contents
@@ -41,12 +41,28 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   completeCheckout(): void {
-    console.log(this.contactForm.get('email'));
-    if (!this.contactForm.invalid && this.cartService.getTotalItem() > 0) {
+    if (
+      this.nameError &&
+      this.emailError &&
+      this.addressError &&
+      this.cartService.getTotalItem() > 0
+    ) {
       this.cartService.clearCart();
       this.router.navigate(['/success-order']);
     } else {
       this.notification.create('error', '', 'Something went wrong');
     }
+  }
+
+  nameChanged(event: any) {
+    this.nameError = validator.isLength(event, { min: 4, max: 12 });
+  }
+
+  emailChanged(event: any) {
+    this.emailError = validator.isEmail(event);
+  }
+
+  addressChanged(event: any) {
+    this.addressError = validator.isLength(event, { min: 4, max: 12 });
   }
 }

@@ -24,11 +24,7 @@
   >
     <h2 class="text-xl">Checkout</h2>
     <p>Total Price: ${{ total }}</p>
-    <form
-      class="flex flex-col space-y-3"
-      [formGroup]="contactForm"
-      (ngSubmit)="completeCheckout()"
-    >
+    <div class="flex flex-col space-y-3">
       <div class="flex flex-col justify-between w-[300px]">
         <div class="flex flex-row justify-between">
           <label for="name">Name:</label>
@@ -38,19 +34,11 @@
             id="name"
             name="name"
             required
-            formControlName="name"
+            [(ngModel)]="name"
+            (ngModelChange)="nameChanged($event)"
           />
         </div>
-        <div
-          class="flex text-sm text-red-500"
-          *ngIf="contactForm.get('name')?.errors?.['required']"
-        >
-          Field is required.
-        </div>
-        <div
-          class="flex text-sm text-red-500"
-          *ngIf="contactForm.get('name')?.errors?.['minlength']"
-        >
+        <div class="flex text-sm text-red-500" *ngIf="!nameError">
           minLength is 4.
         </div>
       </div>
@@ -64,27 +52,12 @@
             name="email"
             required
             email="true"
-            formControlName="email"
+            [(ngModel)]="email"
+            (ngModelChange)="emailChanged($event)"
           />
         </div>
-        <div
-          class="flex text-sm text-red-500"
-          *ngIf="contactForm.get('email')?.errors?.['required']"
-        >
-          Field is required.
-        </div>
-        <div
-          class="flex text-sm text-red-500"
-          *ngIf="contactForm.get('email')?.errors?.['email']"
-        >
+        <div class="flex text-sm text-red-500" *ngIf="!emailError">
           Not an email format.
-        </div>
-
-        <div
-          class="flex text-sm text-red-500"
-          *ngIf="contactForm.get('email')?.errors?.['minlength']"
-        >
-          minLength is 4.
         </div>
       </div>
       <div class="flex flex-col w-[300px]">
@@ -96,36 +69,20 @@
             name="address"
             rows="4"
             required
-            formControlName="address"
+            [(ngModel)]="address"
+            (ngModelChange)="addressChanged($event)"
           ></textarea>
         </div>
-        <div
-          class="flex text-sm text-red-500"
-          *ngIf="contactForm.get('address')?.errors?.['required']"
-        >
-          Field is required.
-        </div>
-        <div
-          class="flex text-sm text-red-500"
-          *ngIf="contactForm.get('address')?.errors?.['minlength']"
-        >
+        <div class="flex text-sm text-red-500" *ngIf="!addressError">
           minLength is 4.
         </div>
       </div>
-
       <button
-        type="submit"
         class="w-[100%] bg-blue-400 text-white p-2 rounded-lg cursor-pointer"
-        *ngIf="!contactForm.invalid"
+        (click)="completeCheckout()"
       >
         Complete Checkout
       </button>
-      <button
-        class="w-[100%] bg-red-400 text-white p-2 rounded-lg cursor-pointer"
-        *ngIf="contactForm.invalid"
-      >
-        Complete Checkout
-      </button>
-    </form>
+    </div>
   </div>
 </div>
