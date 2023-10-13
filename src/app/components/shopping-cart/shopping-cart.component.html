@@ -63,6 +63,7 @@
             id="email"
             name="email"
             required
+            email="true"
             formControlName="email"
           />
         </div>
@@ -72,6 +73,13 @@
         >
           Field is required.
         </div>
+        <div
+          class="flex text-sm text-red-500"
+          *ngIf="contactForm.get('email')?.errors?.['email']"
+        >
+          Not an email format.
+        </div>
+
         <div
           class="flex text-sm text-red-500"
           *ngIf="contactForm.get('email')?.errors?.['minlength']"

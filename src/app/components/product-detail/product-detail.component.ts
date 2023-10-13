@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product.model';
 import { CartService } from 'src/app/services/cart.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-product-detail',
@@ -15,7 +16,8 @@ export class ProductDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
-    private cartService: CartService
+    private cartService: CartService,
+    private notification: NzNotificationService
   ) {}
 
   ngOnInit(): void {
@@ -33,6 +35,7 @@ export class ProductDetailComponent implements OnInit {
   }
 
   addToCart(product: Product): void {
+    this.notification.create('success', '', 'Product is added to cart');
     this.cartService.addToCart(product); // Add the selected product to the cart
   }
 }
