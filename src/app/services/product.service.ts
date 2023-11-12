@@ -7,8 +7,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class ProductService {
-  apiUrl =
-    'https://my-json-server.typicode.com/nhutdang198/json-serverrr/products';
+  apiUrl = 'http://localhost:3000/products';
   constructor(private http: HttpClient) {}
 
   getProducts(): Observable<Product[]> {
